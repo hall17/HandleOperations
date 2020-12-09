@@ -15,128 +15,189 @@ namespace HandleOperations
             ProcessName = 3,
             MainWindowTitle = 4,
             MultipleProcess = 5,
-        } 
-        public IntPtr GetHandle(ProcessInfo type,object info)
+        }
+        public IntPtr GetHandle(object info)
         {
-            Process p = new Process();
+            Process p = null;
             IntPtr handle = IntPtr.Zero;
-            switch (type)
+            switch (info.GetType().Name)
             {
-                case ProcessInfo.ProcessId:
+                case "Int32":
                     p = Process.GetProcesses().FirstOrDefault(x => x.Id == (int)info);
-                    if (p != null) handle = p.MainWindowHandle;
-                    p.Dispose();
+                    if (p != null)
+                    {
+                        handle = p.MainWindowHandle;
+                        p.Dispose();
+                    }
                     return handle;
-                case ProcessInfo.ProcessName:
-                    p = Process.GetProcesses().FirstOrDefault(x => x.ProcessName == (string)info);
-                    if (p != null) handle = p.MainWindowHandle;
-                    p.Dispose();
-                    return handle;
-                case ProcessInfo.MainWindowTitle:
-                    p = Process.GetProcesses().FirstOrDefault(x => x.MainWindowTitle == (string)info);
-                    if (p != null) handle = p.MainWindowHandle;
-                    p.Dispose();
-                    return handle;
+                case "String":
+                    string str = (string)info;
+                    if (str.EndsWith(".exe"))
+                    {
+                        str = ((string)info).Substring(0, str.Length - 4);
+                        p = Process.GetProcesses().FirstOrDefault(x => x.ProcessName == str);
+                        if (p != null)
+                        {
+                            handle = p.MainWindowHandle;
+                            p.Dispose();
+                        }
+                        return handle;
+                    }
+                    else
+                    {
+                        p = Process.GetProcesses().FirstOrDefault(x => x.MainWindowTitle == (string)info);
+                        if (p != null)
+                        {
+                            handle = p.MainWindowHandle;
+                            p.Dispose();
+                        }
+                        return handle;
+                    }
+                case "IntPtr":
+                    return (IntPtr)info;
                 default:
-                    return IntPtr.Zero;
+                    return handle;
             }
         }
-        public Process GetProcess(ProcessInfo type, object info)
+        public Process GetProcess(object info)
         {
-            switch (type)
+            switch (info.GetType().Name)
             {
-                case ProcessInfo.Handle:
+                case "IntPtr":
                     return Process.GetProcesses().FirstOrDefault(x => x.MainWindowHandle == (IntPtr)info);
-                case ProcessInfo.ProcessId:
+                case "Int32":
                     return Process.GetProcesses().FirstOrDefault(x => x.Id == (int)info);
-                case ProcessInfo.ProcessName:
-                    return Process.GetProcesses().FirstOrDefault(x => x.ProcessName == (string)info);
-                case ProcessInfo.MainWindowTitle:
-                    return Process.GetProcesses().FirstOrDefault(x => x.MainWindowTitle == (string)info);
+                case "String":
+                    string str = (string)info;
+                    if (str.EndsWith(".exe"))
+                    {
+                        str = str.Substring(0, str.Length - 4);
+                        return Process.GetProcesses().FirstOrDefault(x => x.ProcessName == str);
+                    }
+                    else
+                        return Process.GetProcesses().FirstOrDefault(x => x.MainWindowTitle == str);
                 default:
                     return null;
             }
         }
-        public Process[] GetProcessList(ProcessInfo type, object info)
+        public Process[] GetProcessList(object titleorProcessName)
         {
-            switch (type)
-            {
-                case ProcessInfo.ProcessName:
-                    return Process.GetProcesses().Where(x => x.ProcessName == (string)info).ToArray();
-                case ProcessInfo.MainWindowTitle:
-                    return Process.GetProcesses().Where(x => x.MainWindowTitle == (string)info).ToArray();
+            object info = titleorProcessName;
+            switch (info.GetType().Name)
+            {              
+                case "String":
+                    string str = (string)info;
+                    if (str.EndsWith(".exe"))
+                    {
+                        str = ((string)info).Substring(0, str.Length - 4);
+                        return Process.GetProcesses().Where(x => x.ProcessName == str).ToArray();
+                    }
+                    else
+                    {
+                        return Process.GetProcesses().Where(x => x.MainWindowTitle == (string)info).ToArray();
+                    }
                 default:
                     return null;
             }
         }
-        public bool IsProcessExists(ProcessInfo type, object info)
+        public bool IsProcessExists(object info)
         {
-            switch (type)
+            switch (info.GetType().Name)
             {
-                case ProcessInfo.Handle:
+                case "IntPtr":
                     return (Process.GetProcesses().Any(x => x.MainWindowHandle == (IntPtr)info)) ? true : false;
-                case ProcessInfo.ProcessId:
+                case "Int32":
                     return (Process.GetProcesses().Any(x => x.Id == (int)info)) ? true : false;
-                case ProcessInfo.ProcessName:
-                    return (Process.GetProcesses().Any(x => x.ProcessName == (string)info)) ? true : false;
-                case ProcessInfo.MainWindowTitle:
-                    return (Process.GetProcesses().Any(x => x.MainWindowTitle == (string)info)) ? true : false;
+                case "String":
+                    string str = (string)info;
+                    if (str.EndsWith(".exe"))
+                    {
+                        str = ((string)info).Substring(0, str.Length - 4);
+                        return (Process.GetProcesses().Any(x => x.ProcessName == str)) ? true : false;
+                    }
+                    else
+                    {
+                        return (Process.GetProcesses().Any(x => x.MainWindowTitle == (string)info)) ? true : false;
+                    }
                 default:
                     return false;
             }
         }
-        public void KillProcess(ProcessInfo type, object info)
+        public void KillProcess(object info)
         {
-            Process p = new Process();
-            switch (type)
+            Process p = null;
+            string namz = info.GetType().Name;
+            switch (info.GetType().Name)
             {
-                case ProcessInfo.Process:
+                case "Process":
                     p = (Process)info;
                     if (p != null) p.Kill();
                     break;
-                case ProcessInfo.Handle:
+                case "Process[]":
+                    string processName = ((Process[])info)[0].ProcessName;
+                    foreach (var pr in (Process[])info)
+                    {
+                        if (pr != null) pr.Kill();
+                    }
+                    break;
+                case "IntPtr":
                     p = Process.GetProcesses().FirstOrDefault(x => x.MainWindowHandle == (IntPtr)info);
                     if (p != null) p.Kill();
                     break;
-                case ProcessInfo.ProcessId:
+                case "Int32":
                     p = Process.GetProcesses().FirstOrDefault(x => x.Id == (int)info);
                     if (p != null) p.Kill();
                     break;
-                case ProcessInfo.ProcessName:
-                    p = Process.GetProcesses().FirstOrDefault(x => x.ProcessName == (string)info);
-                    if (p != null) p.Kill();
-                    break;
-                case ProcessInfo.MainWindowTitle:
-                    p = Process.GetProcesses().FirstOrDefault(x => x.MainWindowTitle == (string)info);
-                    if (p != null) p.Kill();
-                    break;
-                case ProcessInfo.MultipleProcess:
-                    foreach (var process in (Process[])info)
+                case "String":
+                    string str = (string)info;
+                    if (str.EndsWith(".exe"))
                     {
-                        if (process != null) process.Kill();
+                        str = ((string)info).Substring(0, str.Length - 4);
+                        p = Process.GetProcesses().FirstOrDefault(x => x.ProcessName == str);
+                        if (p != null) p.Kill();
+                        break;
                     }
-                    break;
+                    else
+                    {
+                        p = Process.GetProcesses().FirstOrDefault(x => x.MainWindowTitle == (string)info);
+                        if (p != null) p.Kill();
+                        break;
+                    }
                 default:
                     break;
             }
         }
-        public void ProcessDisplayMode(ProcessInfo type, object info, DisplayMode mode)
+        public void ProcessDisplayMode(object info, DisplayMode mode)
         {
-            IntPtr handle = GetHandle(type, info);
+            IntPtr handle = GetHandle(info);
             ShowWindow(handle, (int)mode);
         }
-        public void ProcessTransparency(ProcessInfo type, object info,int transparencyPercentage)
+        public void ProcessTransparency(object info, int transparencyPercentage)
         {
-            IntPtr handle = GetHandle(type, info);
+            IntPtr handle = GetHandle(info);
             int value = transparencyPercentage * 255 / 100;
-            SetLayeredWindowAttributes(handle,0, Convert.ToByte(value), LWA_ALPHA);
+            SetLayeredWindowAttributes(handle, 0, Convert.ToByte(value), LWA_ALPHA);
         }
-
+        public void ProcessTopMost(object info, bool isTopmost)
+        {
+            IntPtr handle = GetHandle(info);
+            IntPtr hwndInsertAfter = isTopmost ? HWND_TOPMOST : HWND_NOTOPMOST;
+            SetWindowPos(handle, hwndInsertAfter, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+        }
 
 
 
 
         #region DLL Imports
+        const uint SWP_NOSIZE = 0x0001; // needed to make top most and set location(0,0)
+        static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
+        const UInt32 SWP_NOMOVE = 0x0002;
+        const UInt32 SWP_SHOWWINDOW = 0x0040;
+        public const int GWL_EXSTYLE = -20;
+        public const int WS_EX_LAYERED = 0x80000;
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
         [DllImport("user32.dll")]
         public static extern bool ShowWindow(IntPtr handle, int nCmdShow);
         public const int LWA_ALPHA = 0x2;

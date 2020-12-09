@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace ConsoleApp
 {
     class OtherHandleMethods
     {
-
-
-
         public IntPtr GetHandleByProcessName(string processName)
         {
             IntPtr handle = IntPtr.Zero;
@@ -39,7 +37,6 @@ namespace ConsoleApp
         {
             return Process.GetProcesses().Where(x => x.ProcessName == processName).ToArray();
         }
-
         public Process GetProcessByProcessName(string processName)
         {
             return Process.GetProcesses().FirstOrDefault(x => x.ProcessName == processName);
@@ -56,8 +53,6 @@ namespace ConsoleApp
         {
             return Process.GetProcesses().FirstOrDefault(x => x.MainWindowTitle == mainWindowTitle);
         }
-
-
         public bool IsProcessExists(int processId)
         {
             return (Process.GetProcesses().Any(x => x.Id == processId)) ? true : false;
@@ -74,8 +69,6 @@ namespace ConsoleApp
         {
             return (Process.GetProcesses().Any(x => x.MainWindowTitle == mainWindowTitle)) ? true : false;
         }
-
-
         public void KillProcess(Process process)
         {
             if (process != null) process.Kill();
@@ -107,5 +100,53 @@ namespace ConsoleApp
             }
             return Process.GetProcesses().Any(x => x.ProcessName == processName) ? false : true;
         }
+        public void ProcessDisplayMode(IntPtr handle, DisplayMode mode)
+        {
+            ShowWindow(handle, (int)mode);
+        }
+        public void ProcessTransparency(IntPtr handle, int transparencyPercentage)
+        {
+            int value = transparencyPercentage * 255 / 100;
+            SetLayeredWindowAttributes(handle, 0, Convert.ToByte(value), LWA_ALPHA);
+        }
+        public void ProcessTopMost(IntPtr handle, bool isTopmost)
+        {
+            IntPtr hwndInsertAfter = isTopmost ? HWND_TOPMOST : HWND_NOTOPMOST;
+            SetWindowPos(handle, hwndInsertAfter, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+        }
+
+
+
+        #region DLL Imports
+        const uint SWP_NOSIZE = 0x0001; // needed to make top most and set location(0,0)
+        static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
+        const UInt32 SWP_NOMOVE = 0x0002;
+        const UInt32 SWP_SHOWWINDOW = 0x0040;
+        public const int GWL_EXSTYLE = -20;
+        public const int WS_EX_LAYERED = 0x80000;
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+        [DllImport("user32.dll")]
+        public static extern bool ShowWindow(IntPtr handle, int nCmdShow);
+        public const int LWA_ALPHA = 0x2;
+        public enum DisplayMode
+        {
+            HIDE = 0,    //Hide,
+            SHOWNORMAL = 1,
+            SHOWMINIMIZED = 2,
+            SHOWMAXIMIZED = 3,
+            SHOWNOACTIVATE = 4, // Displays a window in its most recent size and position.            
+            SHOW = 5,   // Displays a window in its most recent size and position
+            MINIMIZE = 6,
+            SHOWMINNOACTIVE = 7,
+            SHOWNA = 8, //NA,
+            RESTORE = 9, //Restore,          
+            SHOWDEFAULT = 10,
+        }   // Window conditions for the process
+        [DllImport("user32.dll")]
+        public static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
+        #endregion
+
     }
 }

@@ -6,3 +6,11 @@ C:\Users\Halil\source\repos\ConsoleApp1\HandleOperations\obj\Debug\netcoreapp3.0
 C:\Users\Halil\source\repos\ConsoleApp1\HandleOperations\obj\Debug\netcoreapp3.0\HandleOperations.AssemblyInfo.cs
 C:\Users\Halil\source\repos\ConsoleApp1\HandleOperations\obj\Debug\netcoreapp3.0\HandleOperations.dll
 C:\Users\Halil\source\repos\ConsoleApp1\HandleOperations\obj\Debug\netcoreapp3.0\HandleOperations.pdb
+C:\Users\Halil\Documents\Repos\HandleOperations\bin\Debug\netcoreapp3.0\HandleOperations.deps.json
+C:\Users\Halil\Documents\Repos\HandleOperations\bin\Debug\netcoreapp3.0\HandleOperations.dll
+C:\Users\Halil\Documents\Repos\HandleOperations\bin\Debug\netcoreapp3.0\HandleOperations.pdb
+C:\Users\Halil\Documents\Repos\HandleOperations\obj\Debug\netcoreapp3.0\HandleOperations.csprojAssemblyReference.cache
+C:\Users\Halil\Documents\Repos\HandleOperations\obj\Debug\netcoreapp3.0\HandleOperations.AssemblyInfoInputs.cache
+C:\Users\Halil\Documents\Repos\HandleOperations\obj\Debug\netcoreapp3.0\HandleOperations.AssemblyInfo.cs
+C:\Users\Halil\Documents\Repos\HandleOperations\obj\Debug\netcoreapp3.0\HandleOperations.dll
+C:\Users\Halil\Documents\Repos\HandleOperations\obj\Debug\netcoreapp3.0\HandleOperations.pdb
