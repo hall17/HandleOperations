@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "KH/p1TE+BI3V+cW3VXUTYKppncrGWgWuw4Hd/mcKNTlmg1vVbCZoNw/r4j3Cxb8FS1SWL3d5+368Nz2gRkT9cQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Halil\\Documents\\Repos\\HandleOperations\\HandleOperations.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Halil\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.0.1\\microsoft.aspnetcore.app.ref.3.0.1.nupkg.sha512",
+    "C:\\Users\\Halil\\.nuget\\packages\\microsoft.netcore.app.ref\\3.0.0\\microsoft.netcore.app.ref.3.0.0.nupkg.sha512",
+    "C:\\Users\\Halil\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\3.0.0\\microsoft.windowsdesktop.app.ref.3.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

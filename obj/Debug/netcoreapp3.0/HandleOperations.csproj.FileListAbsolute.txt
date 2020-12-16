@@ -14,3 +14,4 @@ C:\Users\Halil\Documents\Repos\HandleOperations\obj\Debug\netcoreapp3.0\HandleOp
 C:\Users\Halil\Documents\Repos\HandleOperations\obj\Debug\netcoreapp3.0\HandleOperations.AssemblyInfo.cs
 C:\Users\Halil\Documents\Repos\HandleOperations\obj\Debug\netcoreapp3.0\HandleOperations.dll
 C:\Users\Halil\Documents\Repos\HandleOperations\obj\Debug\netcoreapp3.0\HandleOperations.pdb
+C:\Users\Halil\Documents\Repos\HandleOperations\obj\Debug\netcoreapp3.0\HandleOperations.csproj.CoreCompileInputs.cache

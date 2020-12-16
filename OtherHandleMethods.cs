@@ -125,6 +125,8 @@ namespace ConsoleApp
         const UInt32 SWP_SHOWWINDOW = 0x0040;
         public const int GWL_EXSTYLE = -20;
         public const int WS_EX_LAYERED = 0x80000;
+        [DllImport("user32.dll")]
+        public static extern bool IsIconic(IntPtr handle);
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
         [DllImport("user32.dll")]
